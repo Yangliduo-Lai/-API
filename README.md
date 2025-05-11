@@ -7,4 +7,8 @@ API 官方参考：https://help.aliyun.com/zh/model-studio/use-qwen-by-calling-a
 
 `export DASHSCOPE_API_KEY="YOUR_DASHSCOPE_API_KEY"`
 
+# 默认使用 qwen-max
 `python main.py data/input.txt data/output.txt`
+
+# 使用 deepseek-r1 模型
+python main.py input.txt output.txt --model deepseek-r1

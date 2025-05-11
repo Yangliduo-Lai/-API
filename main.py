@@ -3,13 +3,13 @@ import os
 from openai import OpenAI
 from refined_seed_patterns import seed_patterns
 
-# 使用阿里云百炼平台的 API Key 和兼容地址
+# 初始化 OpenAI 客户端（兼容百炼）
 client = OpenAI(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),  # 或直接填入你的 key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
 
-def text_rephrase(input_path, output_path):
+def text_rephrase(input_path, output_path, model):
     if not client.api_key:
         raise ValueError("未设置 DASHSCOPE_API_KEY。请设置环境变量或在代码中传入。")
 
@@ -48,7 +48,7 @@ Your job is to rewrite the following chemical procedure as a clear, structured, 
 """
 
         response = client.chat.completions.create(
-            model="qwen-max",
+            model=model,
             messages=[
                 {
                     "role": "system",
@@ -73,6 +73,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="逐行改写化学实验步骤")
     parser.add_argument("input", help="输入文件路径")
     parser.add_argument("output", help="输出文件路径")
+    parser.add_argument(
+        "--model", default="qwen-max", help="选择使用的模型（如 deepseek-r1 或 qwen-max）"
+    )
     args = parser.parse_args()
 
-    text_rephrase(args.input, args.output)
+    text_rephrase(args.input, args.output, args.model)
